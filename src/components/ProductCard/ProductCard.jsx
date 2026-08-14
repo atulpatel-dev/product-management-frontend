@@ -1,6 +1,6 @@
+import { Link } from "react-router-dom"
 
-
-export default function ProductTab({ product }) {
+export default function ProductTab({ product ,onDelete }) {
 
     return (
         <div>
@@ -11,8 +11,8 @@ export default function ProductTab({ product }) {
             <strong>₹{product.price}</strong>
 
             <div>
-                <button>Edit</button>
-                <button>Delete</button>
+                <Link to={`/edit-product/${product._id}`}>Edit</Link>
+                <button onClick={()=> onDelete(product._id)}>Delete</button>
             </div>
         </div>
     )

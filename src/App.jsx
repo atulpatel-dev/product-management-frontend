@@ -6,8 +6,12 @@ import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import NotFound from "./pages/NotFound/NotFound";
+
 import Navbar from "./components/Navbar/Navbar";
+
 import Products from "./pages/Products/Products";
+import AddProduct from "./pages/AddProduct/AddProduct";
+import EditProduct from "./pages/EditProduct/EditProduct";
 
 export default function App() {
   return (
@@ -26,11 +30,30 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+
+        {/* Products */}
+
         <Route
           path="/products"
           element={
             <ProtectedRoute>
               <Products />
+            </ProtectedRoute>
+          }
+        />
+        <Route 
+          path="/add-product"
+          element={
+            <ProtectedRoute>
+              <AddProduct />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/edit-product/:id"
+          element={
+            <ProtectedRoute>
+              <EditProduct />
             </ProtectedRoute>
           }
         />

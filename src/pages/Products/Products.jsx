@@ -24,6 +24,25 @@ export default function Products() {
 
     }, []);
 
+   async function handleDelete(id){
+       const token = localStorage.getItem("token");
+
+       const response = await fetch(`http://localhost:8080/products/${id}`, {
+        method: "DELETE",
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+       })
+
+       const data = await response.json();
+       console.log(data);
+       if(data.success){
+            setProducts((currentProducts) =>
+                currentProducts.filter((product)=>product._id !== id)
+            )
+       }
+    }
+
 
     return (
         <>
@@ -33,6 +52,7 @@ export default function Products() {
                 <ProductCard
                     key={product._id}
                     product={product}
+                    onDelete={handleDelete}
                 />
 
             ))}
