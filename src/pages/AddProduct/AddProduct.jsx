@@ -6,13 +6,14 @@ export default function AddProduct() {
     const [description, setDescription] = useState("");
     const [price, setPrice] = useState("");
     const [loading, setLoading] = useState("");
+    const [image, setImage] = useState(null);
 
     const navigate = useNavigate();
 
     async function handleSubmit(e) {
         e.preventDefault();
 
-        if (!title.trim() || !description.trim() || !price) {
+        if (!title.trim() || !description.trim() || !price || !image) {
             alert("Please fill all field");
             return
         }
@@ -20,18 +21,24 @@ export default function AddProduct() {
         try {
             setLoading(true)
 
+            const formData = new FormData();
+
+            formData.append("title", title);
+            formData.append("description", description);
+            formData.append("price", price);
+
+            if (image) {
+                formData.append("image", image);
+            }
+
             const token = await localStorage.getItem("token");
             const response = await fetch("http://localhost:8080/products", {
                 method: "POST",
                 headers: {
-                    "content-type": "application/json",
                     Authorization: `Bearer ${token}`
                 },
-                body: JSON.stringify({
-                    title,
-                    description,
-                    price
-                })
+                body: formData
+
             });
             const data = await response.json();
             console.log(data)
@@ -42,6 +49,8 @@ export default function AddProduct() {
             setTitle("");
             setDescription("");
             setPrice("");
+
+            setImage(null)
 
             navigate("/products");
         } catch (error) {
@@ -63,6 +72,10 @@ export default function AddProduct() {
                 <textarea value={description} placeholder="Description..." onChange={(e) => setDescription(e.target.value)} />
                 <br /><br />
                 <input type="number" value={price} placeholder="Price..." onChange={(e) => setPrice(e.target.value)} />
+
+                <br /><br />
+
+                <input type="file" accept="image/*" onChange={(e) =>setImage(e.target.files[0])} />
                 <br /><br />
                 <button type="submit" disabled={loading} >{loading ? "loading..." : "Add Product"}</button>
             </form>
