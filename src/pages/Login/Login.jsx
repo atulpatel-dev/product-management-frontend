@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom"
+import {useAuth} from "../../context/Context"
 
 
 export default function Login() {
     
     const navigate = useNavigate();
+    const {login} = useAuth();
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("")
@@ -29,8 +31,7 @@ export default function Login() {
         console.log(data);
 
         if(data.success){
-            localStorage.setItem("token" , data.token);
-
+           login(data.token)
             navigate("/dashboard");
         }
 

@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import ProductCard from "../../components/ProductCard/ProductCard";
 
 export default function Products() {
     const [products, setProducts] = useState([]);
+    const navigate = useNavigate();
     useEffect(() => {
 
         async function getProducts() {
@@ -47,7 +49,12 @@ export default function Products() {
     return (
         <>
             <h1> Product Page </h1>
+            <br /> <br />
 
+            <button onClick={()=>navigate("/add-product")}>
+                Add Product
+            </button>
+            <br /><br />
             {products.map((product) => (
                 <ProductCard
                     key={product._id}
