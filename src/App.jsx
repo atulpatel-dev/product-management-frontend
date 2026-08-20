@@ -6,6 +6,7 @@ import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import NotFound from "./pages/NotFound/NotFound";
+import Profile from "./pages/Profile/Profile"
 
 import Navbar from "./components/Navbar/Navbar";
 
@@ -41,6 +42,18 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+
+         {/* Profile */}
+
+         <Route 
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+          />
+          
         <Route 
           path="/add-product"
           element={

@@ -17,6 +17,7 @@ export default function Navbar() {
                     <>
                         <Link to="/dashboard" >Dashboard</Link> &nbsp; 
                         <Link to="/products" >Products</Link> &nbsp; 
+                        <Link to="/profile" >Profile</Link> &nbsp; 
                         <button onClick={handleLogout} >Logout</button> &nbsp; 
                     </>
                 ) : (

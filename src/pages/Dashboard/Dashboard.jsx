@@ -27,6 +27,7 @@ export default function Dashboard() {
             <h1>Loading...</h1>
         )
     }
+    
 
     return (
         <>
