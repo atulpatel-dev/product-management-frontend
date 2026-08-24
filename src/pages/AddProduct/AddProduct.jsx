@@ -31,7 +31,7 @@ export default function AddProduct() {
                 formData.append("image", image);
             }
 
-            const token = await localStorage.getItem("token");
+            const token = localStorage.getItem("token");
             const response = await fetch("http://localhost:8080/products", {
                 method: "POST",
                 headers: {

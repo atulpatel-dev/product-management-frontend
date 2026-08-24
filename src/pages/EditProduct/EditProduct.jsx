@@ -15,16 +15,27 @@ export default function EditProduct() {
 
     useEffect(() => {
         async function getProduct() {
+            try {
+                const token = localStorage.getItem("token");
 
-            const token = await localStorage.getItem("token");
+                const response = await fetch(`http://localhost:8080/products/${id}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+                const data = await response.json()
+                if (!response.ok) {
 
-            const response = await fetch(`http://localhost:8080/products/${id}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`
+                    if (response.status === 403) {
+                        alert("You are not allowed to edit this product.");
+                        navigate("/products");
+                        return;
+                    }
+
+                    alert(data.message);
+                    navigate("/products");
+                    return;
                 }
-            });
-            const data = await response.json()
-            if (data._id) {
                 setTitle(data.title);
                 setDescription(data.description);
                 setPrice(data.price);
@@ -32,13 +43,17 @@ export default function EditProduct() {
                 if (data.image) {
                     setExistingImage(data.image)
                 }
-            }
+            } catch (error) {
+                console.error("failed to get product", error);
+                alert("something went wrong , please try again");
+                navigate("/products")
 
+            }
         }
         getProduct();
     }, [id])
 
-    async function handalSubmit(e) {
+    async function handleSubmit(e) {
         e.preventDefault();
 
         if (!title.trim() || !description.trim() || !price) {
@@ -58,7 +73,7 @@ export default function EditProduct() {
                 formData.append("image", image)
             }
 
-            const token = await localStorage.getItem("token");
+            const token = localStorage.getItem("token");
             const response = await fetch(`http://localhost:8080/products/${id}`, {
                 method: "PUT",
                 headers: {
@@ -69,9 +84,15 @@ export default function EditProduct() {
             const data = await response.json();
 
             if (!response.ok) {
+
+                if (response.status === 403) {
+                    alert("You are not allowed to edit this product.");
+                    return;
+                }
+
                 alert(data.message);
                 return;
-            };
+            }
 
             if (data.success) {
                 navigate("/products")
@@ -90,7 +111,7 @@ export default function EditProduct() {
         <>
 
             <h1>Edit page</h1>
-            <form onSubmit={handalSubmit} >
+            <form onSubmit={handleSubmit} >
                 <br /> <br />
                 <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
                 <br /> <br />
@@ -110,6 +131,7 @@ export default function EditProduct() {
                 <button type="submit" disabled={loading} >
                     {loading ? "Updating..." : "Update Product"}
                 </button>
+                <button type="submit" onClick={()=> navigate("/products")} disabled={loading} >Cancel</button>
             </form>
         </>
 
