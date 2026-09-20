@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom"
-import {useAuth} from "../../context/Context"
-
+import { useAuth } from "../../context/Context"
+import { loginUser } from "../../api/userApi";
 
 export default function Login() {
-    
+
     const navigate = useNavigate();
-    const {login} = useAuth();
+    const { login } = useAuth();
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("")
@@ -15,26 +15,22 @@ export default function Login() {
     async function handleLogin(e) {
         e.preventDefault();
 
-        const response = await fetch("http://localhost:8080/users/login", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
+        try {
+            const data = await loginUser({
                 email,
                 password
-            })
-        });
+            });
 
-        const data = await response.json();
+            console.log(data);
 
-        console.log(data);
-
-        if(data.success){
-           login(data.token)
-            navigate("/dashboard");
+            if (data.success) {
+                login(data.token);
+                navigate("/dashboard");
+            }
+        } catch (error) {
+            console.error("Login failed", error);
+            alert(error.message || "Login failed");
         }
-
     }
 
     function updateEmail(e) {

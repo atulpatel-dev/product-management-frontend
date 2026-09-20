@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom";
+import { registerUser } from "../../api/userApi";
 
 export default function Register() {
     const navigate = useNavigate();
@@ -7,7 +8,7 @@ export default function Register() {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [error , setError] = useState("");
+    const [error, setError] = useState("");
 
     function updateName(e) {
         setName(e.target.value)
@@ -20,30 +21,24 @@ export default function Register() {
     function updatePassword(e) {
         setPassword(e.target.value)
     };
-
     async function handleRagister(e) {
         e.preventDefault();
 
-        const response = await fetch("http://localhost:8080/users/register", {
-            method:"POST",
-            headers: {
-                "content-Type": "application/json"
-            },
-
-            body: JSON.stringify({
+        try {
+            const data = await registerUser({
                 name,
                 email,
                 password
-            })
-        })
- 
-        const data = await response.json();
+            });
 
-        console.log(data);
-        if(data.success){
-            navigate("/login")
-        }else{
-            setError(data.message);
+            console.log(data);
+
+            if (data.success) {
+                navigate("/login");
+            }
+        } catch (error) {
+            console.error("Registration failed", error);
+            setError(error.message || "Registration failed");
         }
     }
 
@@ -51,7 +46,7 @@ export default function Register() {
     return (
         <>
             <h1>Ragister page</h1>
-            
+
             <form onSubmit={handleRagister} >
                 <br />
                 <input
@@ -70,7 +65,7 @@ export default function Register() {
                 {error && <p>{error}</p>}
                 <br />
                 <br />
-                
+
 
                 <input
                     type="password"

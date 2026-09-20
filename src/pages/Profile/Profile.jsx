@@ -1,36 +1,45 @@
 import { useEffect, useState } from "react";
+import { getProfile } from "../../api/userApi";
 
 
-export default function Profile(){
-    const [user , setUser] = useState(null);
+export default function Profile() {
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
 
-    useEffect(()=>{
+    useEffect(() => {
+        async function getUserProfile() {
+            try {
+                const data = await getProfile();
 
-        async function getProfile(){
-            const token = localStorage.getItem("token");
-            const response = await fetch("http://localhost:8080/users/profile",{
-                headers: {
-                    Authorization: `Bearer ${token}`
+                console.log(data);
+
+                if (data.success) {
+                    setUser(data.user);
                 }
-                
-            })
-            const data = await response.json();
-            if(data.success){
-                setUser(data.user);
+            } catch (error) {
+                console.error("Failed to load profile", error);
+                setError(error.message || "Failed to load profile");
+            } finally {
+                setLoading(false);
             }
         }
-        getProfile();
-    },[])
-    if(!user){
-        return (<h2>Loading...</h2>)
+
+        getUserProfile();
+    }, []);
+    if (loading) {
+        return <h2>Loading...</h2>;
     }
 
+    if (error) {
+        return <h2>{error}</h2>;
+    }
 
-    return(
+    return (
         <>
             <h2>Name: {user.name} </h2> <br />
-            <p>Email: {user.email}</p> <br />
-            <p>Role{user.role} </p> <br />
+            <p>Email: <b>{user.email}</b> </p> <br />
+            <p>Role: <b>{user.role}</b>  </p> <br />
         </>
     )
 }

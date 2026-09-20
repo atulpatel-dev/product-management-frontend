@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom"
+import { getProductById, updateProduct } from "../../api/productApi";
 
 export default function EditProduct() {
     const navigate = useNavigate();
@@ -16,26 +17,9 @@ export default function EditProduct() {
     useEffect(() => {
         async function getProduct() {
             try {
-                const token = localStorage.getItem("token");
+                const data = await getProductById(id);
+                console.log(data);
 
-                const response = await fetch(`http://localhost:8080/products/${id}`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                });
-                const data = await response.json()
-                if (!response.ok) {
-
-                    if (response.status === 403) {
-                        alert("You are not allowed to edit this product.");
-                        navigate("/products");
-                        return;
-                    }
-
-                    alert(data.message);
-                    navigate("/products");
-                    return;
-                }
                 setTitle(data.title);
                 setDescription(data.description);
                 setPrice(data.price);
@@ -44,9 +28,15 @@ export default function EditProduct() {
                     setExistingImage(data.image)
                 }
             } catch (error) {
-                console.error("failed to get product", error);
-                alert("something went wrong , please try again");
-                navigate("/products")
+                console.log("Failed to update product", error);
+                if (error.status === 403) {
+                    alert("You are not allowed to edit this product");
+                    navigate("/products");
+                    return
+                }
+
+                alert(error.message || "Something went wrong , Please try again");
+                navigate("/products");
 
             }
         }
@@ -73,34 +63,21 @@ export default function EditProduct() {
                 formData.append("image", image)
             }
 
-            const token = localStorage.getItem("token");
-            const response = await fetch(`http://localhost:8080/products/${id}`, {
-                method: "PUT",
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-                body: formData
-            });
-            const data = await response.json();
+            const data = await updateProduct(id, formData);
 
-            if (!response.ok) {
-
-                if (response.status === 403) {
-                    alert("You are not allowed to edit this product.");
-                    return;
-                }
-
-                alert(data.message);
-                return;
-            }
+            console.log(data);
 
             if (data.success) {
                 navigate("/products")
             }
 
         } catch (error) {
-            console.log("Failed to update product", error);
-            alert("Something went wrong , Please try again")
+            console.error("Failed to update product " , error)
+            if(error.status === 403){
+                alert("You are not allowed to update this product");
+                return
+            }
+            alert(error.message || "Something went wrong , please try again")
 
         } finally {
             setLoading(false);
@@ -131,7 +108,7 @@ export default function EditProduct() {
                 <button type="submit" disabled={loading} >
                     {loading ? "Updating..." : "Update Product"}
                 </button>
-                <button type="submit" onClick={()=> navigate("/products")} disabled={loading} >Cancel</button>
+                <button type="button" onClick={() => navigate("/products")} disabled={loading} >Cancel</button>
             </form>
         </>
 

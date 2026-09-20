@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { createProduct } from "../../api/productApi";
 
 export default function AddProduct() {
     const [title, setTitle] = useState("");
@@ -31,21 +32,9 @@ export default function AddProduct() {
                 formData.append("image", image);
             }
 
-            const token = localStorage.getItem("token");
-            const response = await fetch("http://localhost:8080/products", {
-                method: "POST",
-                headers: {
-                    Authorization: `Bearer ${token}`
-                },
-                body: formData
+            const data = await createProduct(formData);
+            console.log(data);
 
-            });
-            const data = await response.json();
-            console.log(data)
-            if (!response.ok) {
-                alert(data.message);
-                return
-            }
             setTitle("");
             setDescription("");
             setPrice("");
@@ -75,7 +64,7 @@ export default function AddProduct() {
 
                 <br /><br />
 
-                <input type="file" accept="image/*" onChange={(e) =>setImage(e.target.files[0])} />
+                <input type="file" accept="image/*" onChange={(e) => setImage(e.target.files[0])} />
                 <br /><br />
                 <button type="submit" disabled={loading} >{loading ? "loading..." : "Add Product"}</button>
             </form>

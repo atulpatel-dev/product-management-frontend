@@ -1,33 +1,40 @@
 import { useEffect, useState } from "react"
+import { getProfile } from "../../api/userApi";
 
 export default function Dashboard() {
     const [user, setUser] = useState(null);
-   
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
+
     useEffect(() => {
+        async function getUserProfile() {
+            try {
+                const data = await getProfile();
 
-        async function getProfile() {
-            const token = await localStorage.getItem("token");
+                console.log(data);
 
-            const response = await fetch("http://localhost:8080/users/profile", {
-                headers: {
-                    authorization: ` Bearer ${token}`
+                if (data.success) {
+                    setUser(data.user);
                 }
-            })
-            const data = await response.json();
-            console.log(data);
-            if (data.success) {
-                setUser(data.user);
+            } catch (error) {
+                console.error("Failed to load dashboard", error);
+                setError(error.message || "Failed to load dashboard");
+            } finally {
+                setLoading(false);
             }
         }
-        getProfile();
+
+        getUserProfile();
     }, []);
 
-    if (!user) {
-        return (
-            <h1>Loading...</h1>
-        )
+    if (loading) {
+        return <h1>Loading...</h1>;
     }
-    
+
+    if (error) {
+        return <h1>{error}</h1>;
+    }
+
 
     return (
         <>
@@ -36,7 +43,7 @@ export default function Dashboard() {
             <h2>Welcome: {user.name} </h2>
             <p>Email: {user.email} </p>
             <p>Role: {user.role}</p>
-            
+
         </>
     )
 }
