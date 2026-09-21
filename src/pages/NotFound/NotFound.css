@@ -1,0 +1,147 @@
+.not-found-page {
+    min-height: calc(100vh - 70px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+}
+
+.not-found-card {
+    position: relative;
+    width: 100%;
+    max-width: 620px;
+    padding: 56px 40px;
+    overflow: hidden;
+    text-align: center;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    box-shadow:
+        0 10px 30px rgba(15, 23, 42, 0.06),
+        0 2px 8px rgba(15, 23, 42, 0.03);
+}
+
+.not-found-code {
+    position: absolute;
+    top: -20px;
+    right: 20px;
+    color: #f3f4f6;
+    font-size: 120px;
+    font-weight: 800;
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+}
+
+.not-found-icon {
+    position: relative;
+    width: 64px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    border-radius: 16px;
+    color: #2563eb;
+    background: #eff6ff;
+    font-size: 28px;
+    font-weight: 800;
+}
+
+.not-found-eyebrow {
+    position: relative;
+    margin-bottom: 7px;
+    color: #2563eb;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.not-found-card h1 {
+    position: relative;
+    margin-bottom: 10px;
+    color: #111827;
+    font-size: 30px;
+    line-height: 1.25;
+    letter-spacing: -0.5px;
+}
+
+.not-found-description {
+    position: relative;
+    max-width: 480px;
+    margin: 0 auto;
+    color: #6b7280;
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+.not-found-actions {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 28px;
+}
+
+.not-found-primary-button,
+.not-found-secondary-button {
+    padding: 11px 18px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.not-found-primary-button {
+    border: 1px solid #2563eb;
+    color: #ffffff;
+    background: #2563eb;
+}
+
+.not-found-primary-button:hover {
+    background: #1d4ed8;
+    transform: translateY(-1px);
+}
+
+.not-found-secondary-button {
+    border: 1px solid #d1d5db;
+    color: #374151;
+    background: #ffffff;
+}
+
+.not-found-secondary-button:hover {
+    background: #f3f4f6;
+}
+
+@media (max-width: 600px) {
+    .not-found-page {
+        min-height: calc(100vh - 64px);
+        padding: 24px 16px;
+    }
+
+    .not-found-card {
+        padding: 44px 24px;
+    }
+
+    .not-found-code {
+        font-size: 90px;
+    }
+
+    .not-found-card h1 {
+        font-size: 25px;
+    }
+
+    .not-found-actions {
+        flex-direction: column;
+    }
+
+    .not-found-primary-button,
+    .not-found-secondary-button {
+        width: 100%;
+    }
+}

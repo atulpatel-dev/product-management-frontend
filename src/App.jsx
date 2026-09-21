@@ -1,80 +1,99 @@
-import { Routes, Route } from "react-router-dom";
-import { Navigate } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
+
 import ProtectedRoute from "./components/ProtectedRoute";
+import MainLayout from "./layouts/MainLayout";
+
+import AdminRoute from "./components/AdminRoute/AdminRoute";
+import AdminUsers from "./pages/AdminUsers/AdminUsers";
 
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import NotFound from "./pages/NotFound/NotFound";
-import Profile from "./pages/Profile/Profile"
-
-import Navbar from "./components/Navbar/Navbar";
-
+import Profile from "./pages/Profile/Profile";
 import Products from "./pages/Products/Products";
 import AddProduct from "./pages/AddProduct/AddProduct";
 import EditProduct from "./pages/EditProduct/EditProduct";
 
 export default function App() {
-  return (
-    <>
-      <Navbar />
+    return (
+        <MainLayout>
+            <Routes>
 
-      <Routes>
-        <Route path="/" element={<Navigate to="/dashboard" />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
+                <Route
+                    path="/"
+                    element={<Navigate to="/dashboard" replace />}
+                />
 
-        {/* Products */}
+                <Route
+                    path="/login"
+                    element={<Login />}
+                />
 
-        <Route
-          path="/products"
-          element={
-            <ProtectedRoute>
-              <Products />
-            </ProtectedRoute>
-          }
-        />
+                <Route
+                    path="/register"
+                    element={<Register />}
+                />
 
-         {/* Profile */}
+                <Route
+                    path="/dashboard"
+                    element={
+                        <ProtectedRoute>
+                            <Dashboard />
+                        </ProtectedRoute>
+                    }
+                />
 
-         <Route 
-          path="/profile"
-          element={
-            <ProtectedRoute>
-              <Profile />
-            </ProtectedRoute>
-          }
-          />
-          
-        <Route 
-          path="/add-product"
-          element={
-            <ProtectedRoute>
-              <AddProduct />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/edit-product/:id"
-          element={
-            <ProtectedRoute>
-              <EditProduct />
-            </ProtectedRoute>
-          }
-        />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+                <Route
+                    path="/products"
+                    element={
+                        <ProtectedRoute>
+                            <Products />
+                        </ProtectedRoute>
+                    }
+                />
 
-    </>
-  );
+                <Route
+                    path="/profile"
+                    element={
+                        <ProtectedRoute>
+                            <Profile />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/add-product"
+                    element={
+                        <ProtectedRoute>
+                            <AddProduct />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/edit-product/:id"
+                    element={
+                        <ProtectedRoute>
+                            <EditProduct />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/admin/users"
+                    element={
+                        <AdminRoute>
+                            <AdminUsers />
+                        </AdminRoute>
+                    }
+                />
+
+                <Route
+                    path="*"
+                    element={<NotFound />}
+                />
+
+            </Routes>
+        </MainLayout>
+    );
 }
-
-
